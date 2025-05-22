@@ -30,7 +30,7 @@ const data = {
     hoverFacts: `
       The journey of learning never ends. I am always curious, always building, and always striving to make technology more accessible and impactful. Whether it's experimenting with new frameworks or mentoring peers, I believe in sharing knowledge and growing together.
     `,
-    profileImage: "/src/assets/image.jpg"
+    profileImage: "/assets/image.jpg"
   },
 
   projects: {
@@ -43,7 +43,7 @@ const data = {
         techstack: ["React", "Tailwind", "Supabase"],
         type: "video",
         link: "https://trefloo.vercel.app",
-        media: "/src/assets/projects/Trefloo.mp4",
+        media: "/assets/projects/Trefloo.mp4",
       },
       {
         title: "CardioGuard",
@@ -51,7 +51,7 @@ const data = {
         techstack: ["React", "Supabase", "Arduino", "Machine Learning", "Deno", "Typescript"],
         type: "video",
         link: "cardioGuard.vercel.app",
-        media: "/src/assets/projects/cardioGuard.mp4",
+        media: "/assets/projects/cardioGuard.mp4",
       },
       {
         title: "Qconn",
@@ -59,7 +59,7 @@ const data = {
         techstack: ["HTML", "CSS", "JavaScript", "Supabase"],
         type: "image",
         link: "https://5mokshith.github.io/Qconn",
-        media: "/src/assets/projects/Qconn.png",
+        media: "/assets/projects/Qconn.png",
       },
       {
         title: "Crecon",
@@ -67,7 +67,7 @@ const data = {
         techstack: ["React", "Supabase", "Tailwind"],
         type: "video",
         link: "crecon.vercel.app",
-        media: "/src/assets/projects/Crecon.mp4",
+        media: "/assets/projects/Crecon.mp4",
       },
       {
         title: "Chatbot",
@@ -75,7 +75,7 @@ const data = {
         techstack: ["FastAPI", "Python", "NLP", "Supabase", "BERT"],
         type: "video",
         link: "local development",
-        media: "/src/assets/projects/chatBot.mp4",
+        media: "/assets/projects/chatBot.mp4",
       },
       {
         title: "ChefMate",
@@ -83,7 +83,7 @@ const data = {
         techstack: ["React", "OpenAI API", "Tailwind", "Anthropic API"],
         type: "video",
         link: "local development",
-        media: "/src/assets/projects/chefMate.mp4",
+        media: "/assets/projects/chefMate.mp4",
       }
     ]
   },
