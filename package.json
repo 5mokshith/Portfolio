@@ -13,6 +13,7 @@
     "@lottiefiles/react-lottie-player": "^3.6.0",
     "@splinetool/react-spline": "^4.0.0",
     "@tailwindcss/vite": "^4.1.7",
+    "@vercel/analytics": "^1.5.0",
     "framer-motion": "^12.12.1",
     "lucide-react": "^0.511.0",
     "react": "^19.1.0",

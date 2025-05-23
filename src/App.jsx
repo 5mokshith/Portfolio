@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/react';
 import { Hero } from "./UI/Hero.jsx";
 import About from "./UI/About.jsx";
 import Projects from "./UI/Projects.jsx";
@@ -10,6 +11,7 @@ import Footer from "./UI/Footer.jsx";
 function App() {
   return (
     <>
+    <Analytics />
       <section className="min-h-screen w-full flex items-center justify-center relative">
         <Background></Background>
         <Hero />
