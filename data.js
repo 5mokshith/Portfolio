@@ -62,14 +62,6 @@ const data = {
         media: "/assets/projects/Qconn.png",
       },
       {
-        title: "Crecon",
-        description: "CreCon (Creator Connect) is a collaborative platform that brides the gap between content creators and freelance editors. Creators can post their editing/design needs, while editors can showcase their skills, chat, share demos, and finalize projects all in one place.",
-        techstack: ["React", "Supabase", "Tailwind"],
-        type: "video",
-        link: "crecon.vercel.app",
-        media: "/assets/projects/Crecon.mp4",
-      },
-      {
         title: "Chatbot",
         description: "An AI chatbot for public/enterprise use, handling queries about HR policies, IT support, and events. It features document analysis, profanity filtering, and scalable multi-user support.",
         techstack: ["FastAPI", "Python", "NLP", "Supabase", "BERT"],

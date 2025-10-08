@@ -7,11 +7,13 @@ import Background from "./components/Background.jsx";
 import Skills from "./UI/Skills.jsx";
 import GitHub from "./UI/GitHub.jsx";
 import Footer from "./UI/Footer.jsx";
+import SplashCursor from './UI/splashCursor.jsx';
 
 function App() {
   return (
     <>
     <Analytics />
+    <SplashCursor></SplashCursor>
       <section className="min-h-screen w-full flex items-center justify-center relative">
         <Background></Background>
         <Hero />
