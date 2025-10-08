@@ -106,13 +106,6 @@ const data = {
         relatedProjects: ["Trefloo", "Qconn", "Crecon", "Chatbot"]
       },
       {
-        title: "Embedded Systems & IoT",
-        languages: ["C", "C++"],
-        frameWorks: ["Arduino Framework"],
-        tools: ["Arduino", "ECG Sensor"],
-        relatedProjects: ["CardioGuard"]
-      },
-      {
         title: "UI/UX & Design Tools",
         languages: ["JavaScript"],
         frameWorks: ["React"],
