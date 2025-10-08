@@ -69,14 +69,7 @@ const data = {
         link: "local development",
         media: "/assets/projects/chatBot.mp4",
       },
-      {
-        title: "ChefMate",
-        description: "An intelligent recipe recommender that generates creative dishes based on user-provided ingredients using LLMs and interactive UI.",
-        techstack: ["React", "OpenAI API", "Tailwind", "Anthropic API"],
-        type: "video",
-        link: "local development",
-        media: "/assets/projects/chefMate.mp4",
-      }
+    
     ]
   },
   
