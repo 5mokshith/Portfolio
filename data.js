@@ -82,14 +82,14 @@ const data = {
         languages: ["TypeScript", "JavaScript", "HTML", "CSS"],
         frameWorks: ["React", "Tailwind"],
         tools: ["Vite", "DOM APIs"],
-        relatedProjects: ["Trefloo", "CardioGuard", "ChefMate", "Crecon"]
+        relatedProjects: ["Trefloo", "CardioGuard", "ChefMate"]
       },
       {
         title: "Backend Development",
         languages: ["Python", "TypeScript", "Deno"],
         frameWorks: ["FastAPI"],
         tools: ["Supabase", "Firebase", "REST APIs"],
-        relatedProjects: ["Chatbot", "CardioGuard", "Crecon"]
+        relatedProjects: ["Chatbot", "CardioGuard"]
       },
       {
         title: "Machine Learning & AI",
@@ -103,14 +103,14 @@ const data = {
         languages: ["SQL"],
         frameWorks: ["Express"],
         tools: ["Supabase", "Firebase", "PostgreSQL"],
-        relatedProjects: ["Trefloo", "Qconn", "Crecon", "Chatbot"]
+        relatedProjects: ["Trefloo", "Qconn", "Chatbot"]
       },
       {
         title: "UI/UX & Design Tools",
         languages: ["JavaScript"],
         frameWorks: ["React"],
         tools: ["Figma", "Canva", "Framer Motion"],
-        relatedProjects: ["Trefloo", "ChefMate", "Crecon"]
+        relatedProjects: ["Trefloo", "ChefMate"]
       },
       {
         title: "Version Control & Dev Tools",
