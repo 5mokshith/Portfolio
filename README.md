@@ -17,7 +17,7 @@ Welcome to my portfolio repository! This is a modern, responsive portfolio websi
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/portfolio.git
+git clone https://github.com/5mokshith/portfolio.git
 cd portfolio
 ```
 
