@@ -26,28 +26,11 @@ const Folder = ({ color = '#5227FF', size = 1, items = [], className = '' }) => 
   }
 
   const [open, setOpen] = useState(false);
+  const [hoveredPaper, setHoveredPaper] = useState(null);
   const [paperOffsets, setPaperOffsets] = useState(Array.from({ length: maxItems }, () => ({ x: 0, y: 0 })));
   const containerRef = useRef(null);
 
-  // Auto open on scroll into view
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && entry.intersectionRatio > 0.3) {
-            setOpen(true);
-          } else if (!entry.isIntersecting) {
-            setOpen(false);
-          }
-        });
-      },
-      { threshold: [0, 0.3, 0.6, 1] }
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
+  // Removed auto-open on scroll: folders now open/close only on click
 
   const folderBackColor = darkenColor(color, 0.08);
   const paper1 = darkenColor('#ffffff', 0.1);
@@ -81,6 +64,7 @@ const Folder = ({ color = '#5227FF', size = 1, items = [], className = '' }) => 
       newOffsets[index] = { x: 0, y: 0 };
       return newOffsets;
     });
+    setHoveredPaper(prev => (prev === index ? null : prev));
   };
 
   const folderStyle = {
@@ -133,12 +117,14 @@ const Folder = ({ color = '#5227FF', size = 1, items = [], className = '' }) => 
             return (
               <div
                 key={i}
+                onMouseEnter={() => setHoveredPaper(i)}
                 onMouseMove={e => handlePaperMouseMove(e, i)}
                 onMouseLeave={e => handlePaperMouseLeave(e, i)}
-                className={`absolute z-20 bottom-[10%] left-1/2 transition-all duration-300 ease-in-out ${
+                className={`absolute bottom-[10%] left-1/2 transition-all duration-300 ease-in-out ${
                   !open ? 'transform -translate-x-1/2 translate-y-[10%] group-hover:translate-y-0' : 'hover:scale-110'
                 } ${sizeClasses}`}
                 style={{
+                  zIndex: hoveredPaper === i ? 60 : 25,
                   ...(!open ? {} : { transform: transformStyle }),
                   backgroundColor: i === 0 ? paper1 : i === 1 ? paper2 : paper3,
                   borderRadius: '10px',
@@ -150,22 +136,26 @@ const Folder = ({ color = '#5227FF', size = 1, items = [], className = '' }) => 
             );
           })}
           <div
-            className={`absolute z-30 w-full h-full origin-bottom transition-all duration-300 ease-in-out ${
+            className={`absolute w-full h-full origin-bottom transition-all duration-300 ease-in-out ${
               !open ? 'group-hover:[transform:skew(15deg)_scaleY(0.6)]' : ''
             }`}
             style={{
               backgroundColor: color,
               borderRadius: '5px 10px 10px 10px',
+              zIndex: open ? 10 : 30,
+              pointerEvents: open ? 'none' : 'auto',
               ...(open && { transform: 'skew(15deg) scaleY(0.6)' })
             }}
           ></div>
           <div
-            className={`absolute z-30 w-full h-full origin-bottom transition-all duration-300 ease-in-out ${
+            className={`absolute w-full h-full origin-bottom transition-all duration-300 ease-in-out ${
               !open ? 'group-hover:[transform:skew(-15deg)_scaleY(0.6)]' : ''
             }`}
             style={{
               backgroundColor: color,
               borderRadius: '5px 10px 10px 10px',
+              zIndex: open ? 10 : 30,
+              pointerEvents: open ? 'none' : 'auto',
               ...(open && { transform: 'skew(-15deg) scaleY(0.6)' })
             }}
           ></div>

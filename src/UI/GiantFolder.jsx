@@ -37,10 +37,10 @@ const GiantFolder = ({
 }) => {
   const [open, setOpen] = useState(false);
   const [hasAnimated, setHasAnimated] = useState(false);
+  const [fanVisible, setFanVisible] = useState(false);
   const containerRef = useRef(null);
   const fanRef = useRef(null);
   const bigRef = useRef(null);
-  const unlockScrollRef = useRef(null);
 
   // auto open on scroll into view
   useEffect(() => {
@@ -62,28 +62,9 @@ const GiantFolder = ({
     return () => io.disconnect();
   }, []);
 
-  // Utility: lock and unlock page scroll
-  const lockScroll = () => {
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    const prevent = (e) => { e.preventDefault(); };
-    window.addEventListener('wheel', prevent, { passive: false });
-    window.addEventListener('touchmove', prevent, { passive: false });
-    unlockScrollRef.current = () => {
-      document.body.style.overflow = prevOverflow || '';
-      window.removeEventListener('wheel', prevent);
-      window.removeEventListener('touchmove', prevent);
-    };
-  };
+  // Removed scroll locking for animations
 
-  const unlockScroll = () => {
-    if (unlockScrollRef.current) {
-      unlockScrollRef.current();
-      unlockScrollRef.current = null;
-    }
-  };
-
-  // When opening, animate subfolders from the mouth position into their target grid cells sequentially
+  // Animate subfolders: forward on open, reverse on close
   useEffect(() => {
     const fan = fanRef.current;
     const big = bigRef.current;
@@ -92,6 +73,7 @@ const GiantFolder = ({
     const children = Array.from(fan.children);
 
     if (open && !hasAnimated) {
+      setFanVisible(true);
       // compute mouth (bottom-center of big folder)
       const bigRect = big.getBoundingClientRect();
       const mouth = {
@@ -109,9 +91,6 @@ const GiantFolder = ({
         child.style.transform = `translate(${dx}px, ${dy}px) scale(0.8)`;
       });
 
-      // Lock scroll during sequence (slightly delayed so it doesn't feel early)
-      const lockT = setTimeout(() => lockScroll(), 200);
-
       // Stagger to final positions
       const perDelay = 140; // ms between each folder
       children.forEach((child, i) => {
@@ -125,15 +104,42 @@ const GiantFolder = ({
       // Unlock scroll after sequence completes
       const total = perDelay * children.length + 700;
       const t = setTimeout(() => {
-        unlockScroll();
         setHasAnimated(true);
       }, total);
-      return () => { clearTimeout(t); clearTimeout(lockT); };
+      return () => { clearTimeout(t); };
     }
 
-    if (!open) {
-      // reset animated state for future re-entry if needed
-      setHasAnimated(false);
+    if (!open && hasAnimated) {
+      // Reverse: animate children back to the mouth, then hide fan
+      const bigRect = big.getBoundingClientRect();
+      const mouth = {
+        x: bigRect.left + bigRect.width / 2,
+        y: bigRect.top + bigRect.height - 8
+      };
+
+      // Keep fan visible during reverse
+      setFanVisible(true);
+
+      const perDelay = 120;
+      // animate in reverse order for a neat effect
+      const revChildren = [...children].reverse();
+      revChildren.forEach((child, i) => {
+        setTimeout(() => {
+          const rect = child.getBoundingClientRect();
+          const dx = mouth.x - (rect.left + rect.width / 2);
+          const dy = mouth.y - (rect.top + rect.height / 2);
+          child.style.transition = 'transform 450ms cubic-bezier(0.2,0.8,0.2,1), opacity 350ms ease';
+          child.style.opacity = '0';
+          child.style.transform = `translate(${dx}px, ${dy}px) scale(0.85)`;
+        }, perDelay * i);
+      });
+
+      const total = perDelay * revChildren.length + 550;
+      const t = setTimeout(() => {
+        setFanVisible(false);
+        setHasAnimated(false);
+      }, total);
+      return () => clearTimeout(t);
     }
   }, [open, hasAnimated]);
 
@@ -145,7 +151,7 @@ const GiantFolder = ({
       <div
         ref={fanRef}
         className={`relative mx-auto mb-10 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8 transition-all duration-500 ${
-          open ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'
+          fanVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'
         }`}
         style={{ maxWidth: 1200 }}
       >
