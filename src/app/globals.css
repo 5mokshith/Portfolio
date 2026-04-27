@@ -1,0 +1,117 @@
+@import "tailwindcss";
+
+/* ─── theme tokens ───────────────────────────────────────────────────── */
+@theme {
+  --color-bg: #0a0a0a;
+  --color-fg: #fafafa;
+  --color-accent: #ff2d2d;
+  --color-accent-glow: rgba(255, 45, 45, 0.4);
+  --color-muted: #6b6b6b;
+  --color-hairline: rgba(255, 255, 255, 0.08);
+  --color-hairline-red: rgba(255, 45, 45, 0.2);
+
+  --font-astro: var(--font-astro);
+  --font-declandar: var(--font-declandar);
+  --font-chakra: var(--font-chakra);
+
+  --container-7xl: 1400px;
+}
+
+/* ─── root vars (so plain CSS can use them too) ──────────────────────── */
+:root {
+  --bg: #0a0a0a;
+  --fg: #fafafa;
+  --accent: #ff2d2d;
+  --accent-glow: rgba(255, 45, 45, 0.4);
+  --muted: #6b6b6b;
+  --hairline: rgba(255, 255, 255, 0.08);
+  --hairline-red: rgba(255, 45, 45, 0.2);
+
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  color-scheme: dark;
+}
+
+/* ─── base ───────────────────────────────────────────────────────────── */
+html,
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-chakra), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+html {
+  scroll-behavior: auto; /* lenis handles smoothness */
+}
+
+/* hide native cursor on non-touch — overridden in @media below */
+@media (hover: hover) and (pointer: fine) {
+  html,
+  body,
+  a,
+  button,
+  [role="button"] {
+    cursor: none;
+  }
+}
+
+/* ─── selection ─────────────────────────────────────────────────────── */
+::selection {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+/* ─── scrollbar ─────────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+/* ─── lenis recommended styles ──────────────────────────────────────── */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+/* ─── reusable ─────────────────────────────────────────────────────── */
+.mono-caps {
+  font-family: var(--font-declandar), ui-monospace, monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.75rem;
+}
+
+.hairline {
+  border-color: var(--hairline);
+}
+
+/* a tiny pulsing dot used in HUD readouts */
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.55; transform: scale(1.25); }
+}
+.pulse-dot {
+  animation: pulseDot 1.5s ease-in-out infinite;
+}
+
+/* ─── reduced motion ────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
