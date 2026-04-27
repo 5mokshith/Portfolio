@@ -1,7 +1,7 @@
 import { Hero } from "@/components/sections/Hero";
+import { About } from "@/components/sections/About";
 
 const PLACEHOLDERS = [
-  ["02", "ABOUT"],
   ["03", "SELECTED WORK"],
   ["04", "BY THE NUMBERS"],
   ["05", "STACK"],
@@ -13,6 +13,7 @@ export default function Home() {
   return (
     <main>
       <Hero />
+      <About />
 
       {/* placeholder sections — replaced as each section ships */}
       {PLACEHOLDERS.map(([num, name]) => (
