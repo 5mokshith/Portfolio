@@ -1,9 +1,9 @@
 import { Hero } from "@/components/sections/Hero";
 import { About } from "@/components/sections/About";
 import { SelectedWork } from "@/components/sections/SelectedWork";
+import { ByTheNumbers } from "@/components/sections/ByTheNumbers";
 
 const PLACEHOLDERS = [
-  ["04", "BY THE NUMBERS"],
   ["05", "STACK"],
   ["06", "NOW"],
   ["07", "CONTACT"],
@@ -15,6 +15,7 @@ export default function Home() {
       <Hero />
       <About />
       <SelectedWork />
+      <ByTheNumbers />
 
       {/* placeholder sections — replaced as each section ships */}
       {PLACEHOLDERS.map(([num, name]) => (
