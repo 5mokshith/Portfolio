@@ -1,4 +1,5 @@
 import { Hero } from "@/components/sections/Hero";
+import { HeroV2 } from "@/components/sections/HeroV2";
 import { About } from "@/components/sections/About";
 import { SelectedWork } from "@/components/sections/SelectedWork";
 import { ByTheNumbers } from "@/components/sections/ByTheNumbers";
@@ -10,6 +11,7 @@ export default function Home() {
   return (
     <main id="top">
       <Hero />
+      <HeroV2 />
       <About />
       <SelectedWork />
       <ByTheNumbers />
