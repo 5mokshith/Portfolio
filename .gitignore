@@ -63,3 +63,5 @@ scratch/
 tmp/
 *.local
 
+.claude
+

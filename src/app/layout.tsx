@@ -5,6 +5,7 @@ import "./globals.css";
 import { SmoothScroll } from "@/components/system/SmoothScroll";
 import { GrainOverlay } from "@/components/system/GrainOverlay";
 import { CustomCursor } from "@/components/system/CustomCursor";
+import { ClickSpark } from "@/components/effects/ClickSpark";
 
 // Astro — display: hero name, codenames, section heads, big stats
 const astro = localFont({
@@ -47,6 +48,7 @@ export default function RootLayout({
       <body className="bg-bg text-fg overflow-x-hidden">
         <SmoothScroll>{children}</SmoothScroll>
         <GrainOverlay />
+        <ClickSpark />
         <CustomCursor />
       </body>
     </html>
