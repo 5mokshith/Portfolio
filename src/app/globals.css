@@ -104,6 +104,25 @@ html.lenis body {
   animation: pulseDot 1.5s ease-in-out infinite;
 }
 
+/* ─── Section 07 — hairline-outline secondary buttons ──────────────── */
+.contact-hairline-btn {
+  border: 1px solid var(--hairline);
+  transition: border-color 200ms ease, color 200ms ease, background-color 200ms ease;
+}
+.contact-hairline-btn:hover {
+  border-color: var(--accent);
+}
+
+/* ─── Section 07 — animated rim trace on the email CTA ────────────── */
+@property --star-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes starBorderSpin {
+  to { --star-angle: 360deg; }
+}
+
 /* terminal-style blinking caret */
 @keyframes blink {
   0%, 49%   { opacity: 1; }
