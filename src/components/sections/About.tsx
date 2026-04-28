@@ -1,9 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import { BlurText } from "@/components/effects/BlurText";
 import { DecryptedText } from "@/components/effects/DecryptedText";
 import { GlitchText } from "@/components/effects/GlitchText";
+import { RgbSplitText } from "@/components/effects/RgbSplitText";
+import { PhotoStack } from "@/components/about/PhotoStack";
+import { StatusTyper } from "@/components/about/StatusTyper";
 
 /**
  * Section 02 — About.
@@ -35,26 +37,12 @@ export function About() {
           {/* left — photo */}
           <div className="md:col-span-5 lg:col-span-5">
             <BlurText as="div">
-              <div className="relative aspect-[4/5] w-full overflow-hidden border border-hairline-red bg-black/40">
-                <Image
-                  src="/about.jpg"
-                  alt="Mokshith Rao"
-                  fill
-                  sizes="(min-width: 768px) 40vw, 100vw"
-                  className="object-cover object-center"
-                  style={{ filter: "saturate(0.85) contrast(1.05)" }}
-                />
-                {/* hairline corner marks — V1's HUD vocabulary */}
-                <span aria-hidden className="pointer-events-none absolute left-2 top-2 h-3 w-3 border-l border-t border-accent" />
-                <span aria-hidden className="pointer-events-none absolute right-2 top-2 h-3 w-3 border-r border-t border-accent" />
-                <span aria-hidden className="pointer-events-none absolute left-2 bottom-2 h-3 w-3 border-l border-b border-accent" />
-                <span aria-hidden className="pointer-events-none absolute right-2 bottom-2 h-3 w-3 border-r border-b border-accent" />
-              </div>
+              <PhotoStack src="/about.jpg" alt="Mokshith Rao" />
               <p
                 className="mt-3 mono-caps text-muted"
                 style={{ fontFamily: "var(--font-declandar), ui-monospace, monospace" }}
               >
-                <span className="text-accent">◆</span> KARIMNAGAR, IN · b. 2004
+                <span style={{ color: "var(--cyan)" }}>◆</span> KARIMNAGAR, IN · b. 2004
               </p>
             </BlurText>
           </div>
@@ -67,23 +55,14 @@ export function About() {
                 className="font-astro text-fg leading-[0.95]"
                 style={{ fontSize: "clamp(2.25rem, 5vw, 4.25rem)" }}
               >
-                <DecryptedText
-                  text="HI,"
-                  triggerOnInView
-                  duration={700}
-                  delay={120}
-                  className="block"
-                />
+                <RgbSplitText scrub peakPx={5} as="span" className="block">
+                  <DecryptedText text="HI," triggerOnInView duration={700} delay={120} />
+                </RgbSplitText>
                 <span className="block">
                   I&apos;M{" "}
-                  <span className="text-accent">
-                    <DecryptedText
-                      text="MOKSHITH."
-                      triggerOnInView
-                      duration={1100}
-                      delay={400}
-                    />
-                  </span>
+                  <RgbSplitText scrub cursor peakPx={6} as="span" className="text-accent">
+                    <DecryptedText text="MOKSHITH." triggerOnInView duration={1100} delay={400} />
+                  </RgbSplitText>
                 </span>
               </h2>
             </BlurText>
@@ -118,42 +97,44 @@ export function About() {
               </BlurText>
             </div>
 
-            {/* fact strip — 3 columns, V1's hairline+caps style */}
+            {/* status typer — rotating "currently …" readout */}
+            <BlurText as="div" delay={400} className="mt-8 border-t border-hairline-cyan pt-4">
+              <StatusTyper
+                entries={[
+                  { label: "currently building", value: "Phase-2 of the Grok pipeline — pushing toward 1M assets" },
+                  { label: "currently reading", value: "Tigerbeetle internals + DDIA chapters 7-9" },
+                  { label: "currently breaking", value: "my own Go code, on purpose, in tests" },
+                ]}
+              />
+            </BlurText>
+
+            {/* fact strip — HUD: pulsing dots alternating red/cyan, hover reveals caption */}
             <BlurText as="div" delay={500} className="mt-12 grid grid-cols-3 gap-4 border-t border-hairline pt-5">
-              <div>
-                <p
-                  className="mono-caps text-muted"
-                  style={{ fontFamily: "var(--font-declandar), ui-monospace, monospace" }}
-                >
-                  ROLE
-                </p>
-                <p className="mt-2 font-chakra text-[0.95rem] leading-snug text-fg/85">
-                  Founding engineer ·{" "}
-                  <span className="text-accent">Flashback Labs</span>
-                </p>
-              </div>
-              <div>
-                <p
-                  className="mono-caps text-muted"
-                  style={{ fontFamily: "var(--font-declandar), ui-monospace, monospace" }}
-                >
-                  STUDYING
-                </p>
-                <p className="mt-2 font-chakra text-[0.95rem] leading-snug text-fg/85">
-                  B.Tech CSE · grad <span className="text-accent">APR 2026</span>
-                </p>
-              </div>
-              <div>
-                <p
-                  className="mono-caps text-muted"
-                  style={{ fontFamily: "var(--font-declandar), ui-monospace, monospace" }}
-                >
-                  WRITING IN
-                </p>
-                <p className="mt-2 font-chakra text-[0.95rem] leading-snug text-fg/85">
-                  TypeScript · Go · SQL
-                </p>
-              </div>
+              {[
+                { label: "ROLE", value: "Founding engineer · Flashback Labs", caption: "Sept 2024 — present", dot: "red" as const },
+                { label: "STUDYING", value: "B.Tech CSE · grad APR 2026", caption: "Jyothishmathi Institute", dot: "cyan" as const },
+                { label: "WRITING IN", value: "TypeScript · Go · SQL", caption: "+ a little Python when forced", dot: "red" as const },
+              ].map((cell) => (
+                <div key={cell.label} className="group relative">
+                  <p
+                    className="mono-caps text-muted flex items-center gap-2"
+                    style={{ fontFamily: "var(--font-declandar), ui-monospace, monospace" }}
+                  >
+                    <span
+                      className="pulse-dot inline-block h-1.5 w-1.5 rounded-full"
+                      style={{ background: cell.dot === "red" ? "var(--accent)" : "var(--cyan)" }}
+                    />
+                    {cell.label}
+                  </p>
+                  <p className="mt-2 font-chakra text-[0.95rem] leading-snug text-fg/85">{cell.value}</p>
+                  <p
+                    className="mt-1 mono-caps text-fg/35 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                    style={{ fontFamily: "var(--font-declandar), ui-monospace, monospace", fontSize: 9 }}
+                  >
+                    {cell.caption}
+                  </p>
+                </div>
+              ))}
             </BlurText>
           </div>
         </div>
