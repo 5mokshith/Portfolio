@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { Chakra_Petch, Fraunces } from "next/font/google";
+import { Chakra_Petch } from "next/font/google";
 import "./globals.css";
 import { SmoothScroll } from "@/components/system/SmoothScroll";
 import { GrainOverlay } from "@/components/system/GrainOverlay";
 import { CustomCursor } from "@/components/system/CustomCursor";
 import { ClickSpark } from "@/components/effects/ClickSpark";
+import BubbleMenu from "@/components/reactbits/BubbleMenu";
 
 // Astro — display: hero name, codenames, section heads, big stats
 const astro = localFont({
@@ -30,15 +31,6 @@ const chakra = Chakra_Petch({
   display: "swap",
 });
 
-// Fraunces — editorial serif (redesign hero). Variable, optical-sized, strong italic.
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
-  weight: ["300", "400", "500", "600", "700", "900"],
-  style: ["normal", "italic"],
-  subsets: ["latin"],
-  display: "swap",
-});
-
 export const metadata: Metadata = {
   title: "Mokshith Rao — Founding Engineer",
   description:
@@ -52,9 +44,29 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${astro.variable} ${declandar.variable} ${chakra.variable} ${fraunces.variable} antialiased`}
+      className={`${astro.variable} ${declandar.variable} ${chakra.variable} antialiased`}
     >
       <body className="bg-bg text-fg overflow-x-hidden">
+        <BubbleMenu
+          logo={
+            <span
+              style={{
+                fontFamily: "var(--font-astro), ui-sans-serif, system-ui, sans-serif",
+                fontSize: "1.05rem",
+                letterSpacing: "0.04em",
+                color: "#0a0a0a",
+              }}
+            >
+              MR
+            </span>
+          }
+          menuBg="#fafafa"
+          menuContentColor="#0a0a0a"
+          useFixedPosition
+          animationEase="back.out(1.5)"
+          animationDuration={0.5}
+          staggerDelay={0.1}
+        />
         <SmoothScroll>{children}</SmoothScroll>
         <GrainOverlay />
         <ClickSpark />

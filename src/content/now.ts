@@ -1,55 +1,47 @@
 /**
  * Single source of truth for Section 06 — NOW.
- *
- * Edit this file when status changes. `lastSync` is hand-bumped on edit
- * (the explicit "I updated this" gesture — not Date.now()).
- *
- * `uptimeAnchor` is locked: Flashback Labs founding-engineer start.
- * Don't drift it.
+ * Bump `updated` on edit. Honest snapshot, not auto-generated telemetry.
  */
 
-export type StatusLine = {
-  /** mono-caps label, fixed-width column on md+ */
+export type NowEntry = {
+  /** small mono label */
   label: string;
-  /** ragged-right value, may include · separators */
+  /** plain prose value */
   value: string;
 };
 
 export type NowContent = {
-  /** rendered after "LAST SYNC:" — bump on edit */
-  lastSync: string;
-  /** ISO instant the uptime counter counts FROM */
-  uptimeAnchor: string;
-  /** prefix line for the live counter */
-  uptimeLabel: string;
-  /** rendered + decoded in array order */
-  lines: StatusLine[];
+  /** rendered as the as-of date — bump on edit */
+  updated: string;
+  /** open-to availability hint */
+  availability: string;
+  /** the four "now" lines */
+  entries: NowEntry[];
 };
 
 export const NOW: NowContent = {
-  lastSync: "27 APR 2026",
-  uptimeAnchor: "2025-08-22T00:00:00Z",
-  uptimeLabel: "FLASHBACK LABS · UPTIME:",
-  lines: [
+  updated: "27 April 2026",
+  availability: "Open to founding-engineer / infra / AI-infra roles",
+  entries: [
     {
-      label: "CURRENT OP",
-      value: "GROK PIPELINE / PHASE 2 / 1M asset target",
+      label: "Currently building",
+      value:
+        "Phase-2 of the Grok pipeline — pushing toward a 1M-asset target with tighter face-detection latency on the processor pods.",
     },
     {
-      label: "BOTTLENECK",
-      value: "SCRFD face-detection latency on processor pods",
+      label: "Currently learning",
+      value:
+        "Deeper Go concurrency patterns and ONNX model surgery; reading the Tigerbeetle internals.",
     },
     {
-      label: "JUST SHIPPED",
-      value: "flashbacklabs.com redesign · red/brass/gunmetal",
+      label: "Last shipped",
+      value:
+        "ChefMate v1 — meal planner across web + native Android with on-device ingredient detection.",
     },
     {
-      label: "STATUS",
-      value: "B.TECH CSE · final semester · grad APR 2026",
-    },
-    {
-      label: "OPEN TO",
-      value: "conversations · founding eng · infra · AI infra",
+      label: "Status",
+      value:
+        "Final-semester B.Tech CSE at Jyothishmathi Institute. Graduating April 2026.",
     },
   ],
 };

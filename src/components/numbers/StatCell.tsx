@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { motion } from "motion/react";
+import { useEffect, useRef, useState } from "react";
+import { motion, useInView } from "motion/react";
 import { CountUp } from "@/components/effects/CountUp";
 import { Beams } from "@/components/numbers/Beams";
 import { SquaresGrid } from "@/components/numbers/SquaresGrid";
@@ -55,6 +55,17 @@ export function StatCell({
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [hovering, setHovering] = useState(false);
+  // Pixel canvas plays ONCE when the cell scrolls into view: pixels appear,
+  // hold for ~2.6s, then fade back out. Hover re-summons them while held.
+  const inView = useInView(ref, { once: true, amount: 0.35 });
+  const [scrollAppearing, setScrollAppearing] = useState(false);
+  useEffect(() => {
+    if (!inView) return;
+    setScrollAppearing(true);
+    const t = setTimeout(() => setScrollAppearing(false), 2600);
+    return () => clearTimeout(t);
+  }, [inView]);
+  const pixelsActive = scrollAppearing || hovering;
 
   const digitClass = "font-astro leading-[0.92] tracking-tight text-fg";
   const digitSize = stat.hero
@@ -97,7 +108,7 @@ export function StatCell({
       >
         <div className="relative isolate flex h-full flex-col justify-between overflow-hidden rounded-md p-6 md:p-8 lg:p-10">
           <Background bg={stat.bg} />
-          <PixelCanvas active={hovering} />
+          <PixelCanvas active={pixelsActive} />
 
           {/* digits + unit */}
           <div className="relative z-10 flex items-baseline gap-1">

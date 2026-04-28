@@ -1,83 +1,110 @@
 /**
- * Single source of truth for the four Selected-Work panels.
- * Edit here when a project status, link, or metric changes.
+ * Single source of truth for the four Selected Work case-study cards.
+ * Drawn from the user's resume + Work.docx project notes.
  */
 
+export type ProjectLink = {
+  label: string;
+  href: string;
+  external?: boolean;
+};
+
 export type Project = {
-  index: string;          // "01" .. "04" — printed top-right
-  codename: string;       // big Astro headline
-  tagline: string;        // italic one-liner
-  stack: string[];        // tags rendered between hairlines
-  story: string;          // 2-3 sentence prose
-  metric: string;         // mono caps badge (the punchy line)
-  href?: string;          // GitHub / live demo
-  hrefLabel?: string;     // override for the link label, defaults to "OPEN"
-  visual: "grok" | "aura" | "autodev" | "chefmate"; // dispatch key
+  /** "01" .. "04" — small index in card corner. */
+  index: string;
+  /** display title in serif. */
+  title: string;
+  /** short italic tagline rendered next to / under the title. */
+  tagline: string;
+  /** 2–3 sentence plain-English description of what the project does. */
+  description: string;
+  /** up to 3 short bullets of what the user actually built. */
+  highlights: string[];
+  /** 4–6 most-relevant techs as chips. */
+  stack: string[];
+  /** action links — render in card footer. */
+  links: ProjectLink[];
+  /** visual treatment — screenshot path under /public, or "data-art". */
+  visual:
+    | { kind: "screenshot"; src: string; alt: string }
+    | {
+        kind: "data-art";
+        /** big numerator pulled out as the cover number, e.g. "442K". */
+        bigNumber: string;
+        /** caption under the number — e.g. "images · 60 GB · 99.99% consistency". */
+        caption: string;
+      };
 };
 
 export const PROJECTS: Project[] = [
   {
     index: "01",
-    codename: "GROK PIPELINE",
-    tagline:
-      "Production-scale media pipeline. Three stages, triple dedup, stealth-fingerprinted at the edge.",
-    stack: [
-      "TypeScript",
-      "Go",
-      "AWS SQS",
-      "DynamoDB",
-      "S3",
-      "Playwright",
-      "ONNX (SCRFD)",
+    title: "AURA",
+    tagline: "Agentic Unified Reasoning Assistant.",
+    description:
+      "A multi-agent AI workflow platform. Type a natural-language instruction — \"draft an email to my team and add a calendar invite\" — and a Planner → 5 Workers → Evaluator pipeline executes it across Gmail, Drive, Docs, Sheets, and Calendar autonomously.",
+    highlights: [
+      "Hierarchical Planner → 5 Workers → Evaluator with resumable DAG execution",
+      "AES-256-GCM encrypted OAuth tokens with 5-min pre-expiry auto-refresh",
+      "Realtime progress streaming via Supabase Realtime — full execution observability",
     ],
-    story:
-      "Three-stage distributed pipeline ingesting tweets across 10 rotating accounts. Triple-tier dedup — URL → SHA-256 → perceptual hash. Deterministic stealth fingerprinting (HMAC-seeded PRNG, canvas-noise injection) to evade detection across 27K+ hourly windows. SCRFD face detection in Go via ONNX runtime with goroutine pools.",
-    metric: "442K IMAGES · 590K TWEETS · 99.99% CONSISTENCY · 13 DAYS RUNTIME",
-    href: "#",
-    hrefLabel: "REPO · PRIVATE",
-    visual: "grok",
+    stack: ["Next.js 16", "Gemini 2.5", "Supabase", "Google APIs", "TypeScript"],
+    links: [
+      { label: "Repo", href: "https://github.com/5mokshith", external: true },
+    ],
+    visual: { kind: "data-art", bigNumber: "5", caption: "google APIs orchestrated · 7 tables · DAG · realtime" },
   },
   {
     index: "02",
-    codename: "AURA",
-    tagline:
-      "Hierarchical multi-agent system for natural-language workflow execution.",
-    stack: ["Next.js", "TypeScript", "Supabase", "Gemini", "Google Workspace APIs"],
-    story:
-      "Planner → 5 Domain Workers → Evaluator architecture. Step-based DAG execution engine with mid-plan restart via resumeFromStepId. AES-256-GCM encrypted OAuth tokens, RLS across 7 PostgreSQL tables, token-bucket rate limiting per endpoint type.",
-    metric: "5 GOOGLE APIs · 7 TABLES · DAG EXECUTION · LIVE STREAMING",
-    href: "#",
-    hrefLabel: "GITHUB",
-    visual: "aura",
+    title: "Grok pipeline",
+    tagline: "Distributed media ingestion at production scale.",
+    description:
+      "A three-stage distributed pipeline — TypeScript scraper → Go image processor → enricher — ingesting AI-generated media across 10 rotating accounts. Triple-tier deduplication, deterministic stealth fingerprinting, ML-based face detection inline.",
+    highlights: [
+      "442K deduplicated images (60 GB) at 99.99% S3 ↔ DynamoDB consistency in 13 days",
+      "Triple dedup: URL → SHA-256 → perceptual hash (Hamming ≤ 10)",
+      "SCRFD ONNX face detection in Go with goroutine pools across 27K+ hourly windows",
+    ],
+    stack: ["TypeScript", "Go", "AWS SQS / DynamoDB / S3", "Playwright", "ONNX Runtime"],
+    links: [{ label: "Private repo", href: "#" }],
+    visual: {
+      kind: "data-art",
+      bigNumber: "442K",
+      caption: "images · 60 GB · 99.99% consistency · 13 days runtime",
+    },
   },
   {
     index: "03",
-    codename: "AUTODEV",
-    tagline: "Browser-native AI code editor. Node servers running in-page.",
-    stack: [
-      "Next.js",
-      "Inngest",
-      "Convex",
-      "WebContainers",
-      "OpenAI / Anthropic / Groq / Gemini",
+    title: "ChefMate",
+    tagline: "AI recipe and meal-planning, web + Android.",
+    description:
+      "AI-powered recipe generator and meal planner shipping as both a Vercel-hosted web app and a native Android app via Capacitor. On-device ingredient detection, calorie/macro tracking, 7-day auto-fill meal planning, subscription tiers.",
+    highlights: [
+      "On-device ingredient detection via TFLite (TensorFlow.js + custom Vite plugin)",
+      "Mifflin-St Jeor BMR → TDEE nutritional model with macro-validation per slot",
+      "PKCE OAuth2 with Android deep-link callbacks; subscription-tier quota enforcement",
     ],
-    story:
-      "Natural-language → multi-file projects. Node.js dev servers running in-browser via WebContainers. Async agent pipeline on Inngest for non-blocking AI operations. GitHub OAuth + Octokit for repo import/export.",
-    metric: "4 LLM PROVIDERS · IN-BROWSER RUNTIME · 🏆 HONORABLE MENTION",
-    href: "#",
-    hrefLabel: "GITHUB",
-    visual: "autodev",
+    stack: ["React", "Capacitor", "Supabase", "Gemini", "TensorFlow.js", "Vite"],
+    links: [
+      { label: "Repo", href: "https://github.com/5mokshith", external: true },
+    ],
+    visual: { kind: "data-art", bigNumber: "2", caption: "platforms — web + native android · on-device ML · subscription tiers" },
   },
   {
     index: "04",
-    codename: "CHEFMATE",
-    tagline: "AI meal planning. Web app + native Android. On-device inference.",
-    stack: ["React", "Vite", "Express", "Supabase", "Capacitor", "TFLite", "Gemini"],
-    story:
-      "Full-stack AI meal app shipped to web and native Android via Capacitor. On-device ingredient detection via TFLite (WASM/WebGL backends). Mifflin-St Jeor BMR/TDEE calculations, structured-JSON Gemini recipe generation, PKCE OAuth with Android deep-link callbacks.",
-    metric: "WEB + ANDROID · ON-DEVICE ML · SUBSCRIPTION TIERS",
-    href: "#",
-    hrefLabel: "GITHUB",
-    visual: "chefmate",
+    title: "AutoDev",
+    tagline: "Browser-native AI code editor.",
+    description:
+      "An in-browser AI code editor that converts natural language into multi-file projects, running Node.js dev servers in-page via WebContainers. Async agent pipeline with multi-LLM routing. Honorable Mention at hackathon.",
+    highlights: [
+      "Async agent pipeline (Inngest) with multi-LLM routing and structured tool-call error handling",
+      "Live file-tree and editor sync via Convex; Node.js dev servers running in-page (WebContainers)",
+      "GitHub OAuth + Octokit for repository import / export",
+    ],
+    stack: ["Next.js", "WebContainers", "Inngest", "Convex", "Multi-LLM", "Clerk"],
+    links: [
+      { label: "Repo", href: "https://github.com/5mokshith", external: true },
+    ],
+    visual: { kind: "data-art", bigNumber: "4", caption: "LLM providers · in-browser runtime · honorable mention" },
   },
 ];

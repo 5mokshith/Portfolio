@@ -52,14 +52,16 @@ export function HeroText({ scrollHostRef }: { scrollHostRef: React.RefObject<HTM
         style={{ y: lift }}
         className="w-full px-5 pb-20 md:px-12 md:pb-28 lg:px-20 lg:pb-32"
       >
-        {/* role line */}
+        {/* role line — small mono caps, factual */}
         <p
           className="mono-caps text-fg/80"
           style={{ fontFamily: "var(--font-declandar), ui-monospace, monospace" }}
         >
-          <span className="text-accent">FOUNDING ENGINEER</span>
+          <span className="text-accent">HI</span>
           <span className="mx-3 text-fg/40">·</span>
-          <span>FLASHBACK LABS</span>
+          <span>I&apos;M MOKSHITH</span>
+          <span className="mx-3 text-fg/40">·</span>
+          <span className="text-fg/70">KARIMNAGAR, IN</span>
         </p>
 
         {/* name — decoded in.
@@ -86,9 +88,9 @@ export function HeroText({ scrollHostRef }: { scrollHostRef: React.RefObject<HTM
           initial={{ opacity: 0, y: 16 }}
           animate={thesisVisible ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-          className="font-chakra italic text-fg/85 mt-6 md:mt-8 max-w-[26ch] md:max-w-[44ch] text-base md:text-xl"
+          className="font-chakra italic text-fg/85 mt-6 md:mt-8 max-w-[28ch] md:max-w-[48ch] text-base md:text-xl"
         >
-          i ship the unglamorous half. infrastructure, not chatbots.
+          21, founding engineer at flashback labs. typescript, go, and most of the AWS bill.
         </motion.p>
 
         {/* small separator + sub-stat */}

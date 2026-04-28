@@ -10,23 +10,9 @@
   --color-hairline: rgba(255, 255, 255, 0.08);
   --color-hairline-red: rgba(255, 45, 45, 0.2);
 
-  /* ─── Iron Man Mark III palette (redesign tokens) ──────────────── */
-  --color-bg-deep: #14100E;
-  --color-bg-panel: #1C1714;
-  --color-fg-warm: #F4ECDD;
-  --color-fg-muted-warm: #9C8E7B;
-  --color-red-hotrod: #A0202B;
-  --color-red-signal: #E63946;
-  --color-gold-antique: #D4A24C;
-  --color-gold-glow: rgba(212, 162, 76, 0.35);
-  --color-bronze: #7B4B26;
-  --color-hairline-bronze: rgba(212, 162, 76, 0.18);
-  --color-hairline-warm: rgba(244, 236, 221, 0.08);
-
   --font-astro: var(--font-astro);
   --font-declandar: var(--font-declandar);
   --font-chakra: var(--font-chakra);
-  --font-fraunces: var(--font-fraunces);
 
   --container-7xl: 1400px;
 }
