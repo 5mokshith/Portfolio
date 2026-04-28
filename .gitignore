@@ -68,3 +68,6 @@ tmp/
 # superpowers brainstorming artifacts (mockups, server state)
 .superpowers/
 
+# personal docs (resume, scratch notes) — never tracked
+*.docx
+
