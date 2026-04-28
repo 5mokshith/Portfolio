@@ -5,6 +5,8 @@ import { motion } from "motion/react";
 import { BlurText } from "@/components/effects/BlurText";
 import { DecryptedText } from "@/components/effects/DecryptedText";
 import { GlitchText } from "@/components/effects/GlitchText";
+import { RgbSplitText } from "@/components/effects";
+import { DotField } from "@/components/contact/DotField";
 
 type Link = {
   label: string;
@@ -24,11 +26,11 @@ const EMAIL = "mokshithrao1481@gmail.com";
 /**
  * Section 07 — CONTACT.
  *
- * V1 vocabulary: dark bg, mono-caps frame, big Astro headline.
- * Drops the prior "COMMS OPEN / TRANSMISSION" cosplay. Replaced with a
- * personal, plain CTA — "let's build something" — and the email shown
- * in full as the primary action. Email button keeps the rim-trace from
- * the V1 StarBorder vocabulary; secondary links are hairline-outlined.
+ * Final beat of the dual-tone redesign. Cursor-reactive DotField behind the
+ * headline (12×6 alternating red/cyan dots that scale + brighten near the
+ * cursor). Headline gets the most aggressive RgbSplitText (scrub + cursor,
+ * peakPx 12). Email CTA wears a continuously rotating red→cyan rim trace.
+ * Secondary buttons get hover-rgb settling cyan.
  */
 export function Contact() {
   const [hover, setHover] = useState(false);
@@ -39,14 +41,14 @@ export function Contact() {
       data-section="07-contact"
       className="relative isolate flex min-h-screen w-full flex-col bg-bg"
     >
-      {/* warm wash + grain so it doesn't read as a flat slab */}
+      {/* warm wash + grain */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
         style={{
           background:
             "radial-gradient(80% 60% at 50% 35%, rgba(255,45,45,0.08) 0%, rgba(10,10,10,0) 60%)," +
-            "radial-gradient(50% 40% at 80% 80%, rgba(255,45,45,0.06) 0%, rgba(10,10,10,0) 60%)",
+            "radial-gradient(50% 40% at 80% 80%, rgba(0,229,255,0.06) 0%, rgba(10,10,10,0) 60%)",
         }}
       />
       <div
@@ -59,6 +61,9 @@ export function Contact() {
           mixBlendMode: "overlay",
         }}
       />
+
+      {/* cursor-reactive dot field */}
+      <DotField />
 
       {/* top section header */}
       <div className="relative z-10 mx-auto mt-16 w-full max-w-7xl px-5 md:px-10">
@@ -82,13 +87,14 @@ export function Contact() {
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
           >
-            <DecryptedText
-              text="LET'S BUILD"
-              triggerOnInView
-              duration={1100}
-              delay={150}
-              className="block"
-            />
+            <RgbSplitText scrub cursor peakPx={12} as="span" className="block">
+              <DecryptedText
+                text="LET'S BUILD"
+                triggerOnInView
+                duration={1100}
+                delay={150}
+              />
+            </RgbSplitText>
             <motion.span
               className="block"
               animate={{ x: hover ? 6 : 0 }}
@@ -99,19 +105,16 @@ export function Contact() {
           </h2>
         </BlurText>
 
-        {/* email row — primary CTA */}
+        {/* email CTA — rim-trace red→cyan gradient */}
         <BlurText as="div" delay={500} className="mt-10">
           <a
             href={`mailto:${EMAIL}`}
-            className="group inline-flex items-baseline gap-3 border-b border-hairline-red pb-2 transition-colors"
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderBottomColor = "var(--accent)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderBottomColor = "var(--hairline-red)";
-            }}
+            className="rim-trace-gradient group inline-flex items-baseline gap-3 border border-hairline-red px-6 py-4 transition-colors hover:border-accent"
           >
-            <span className="font-astro text-accent" style={{ fontSize: "clamp(1.2rem, 2vw, 1.6rem)" }}>
+            <span
+              className="font-astro text-accent"
+              style={{ fontSize: "clamp(1.2rem, 2vw, 1.6rem)" }}
+            >
               →
             </span>
             <span
@@ -136,8 +139,13 @@ export function Contact() {
               target={l.external ? "_blank" : undefined}
               rel={l.external ? "noopener noreferrer" : undefined}
               {...(l.download ? { download: true } : {})}
-              className="contact-hairline-btn mono-caps inline-flex items-center rounded-sm px-5 py-3 text-fg/85 transition-colors hover:text-accent"
-              style={{ fontFamily: "var(--font-declandar), ui-monospace, monospace" }}
+              data-rgb-text={l.label}
+              data-rgb-settle="cyan"
+              className="hover-rgb mono-caps inline-flex items-center rounded-sm border px-5 py-3 text-fg/85"
+              style={{
+                fontFamily: "var(--font-declandar), ui-monospace, monospace",
+                borderColor: "var(--hairline-cyan)",
+              }}
             >
               {l.label}
             </a>

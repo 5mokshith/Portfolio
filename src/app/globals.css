@@ -129,6 +129,36 @@ html.lenis body {
   to { --star-angle: 360deg; }
 }
 
+/* gradient (red → cyan) rim trace for the contact email CTA */
+.rim-trace-gradient {
+  position: relative;
+  isolation: isolate;
+}
+.rim-trace-gradient::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--star-angle),
+    transparent 0deg,
+    var(--accent) 90deg,
+    var(--cyan) 180deg,
+    transparent 270deg
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  animation: starBorderSpin 4s linear infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .rim-trace-gradient::before { animation: none; }
+}
+
 /* terminal-style blinking caret */
 @keyframes blink {
   0%, 49%   { opacity: 1; }
