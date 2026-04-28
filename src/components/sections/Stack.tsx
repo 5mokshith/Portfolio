@@ -4,7 +4,7 @@ import { BlurText } from "@/components/effects/BlurText";
 import { GlitchText } from "@/components/effects/GlitchText";
 import { DecryptedText } from "@/components/effects/DecryptedText";
 import { RgbSplitText } from "@/components/effects";
-import { KineticChipCloud } from "@/components/stack/KineticChipCloud";
+import { RequestTrace } from "@/components/stack/RequestTrace";
 import { TIERS, TOTAL_ENTRIES } from "@/content/stack";
 
 /**
@@ -69,12 +69,18 @@ export function Stack() {
           </BlurText>
         </div>
 
-        {/* kinetic chip cloud */}
+        {/* live request trace — packet flows top→bottom (request) then back */}
         <div
           className="border-t pt-10 md:pt-14"
           style={{ borderColor: "var(--hairline-cyan)" }}
         >
-          <KineticChipCloud />
+          <p
+            className="mono-caps text-muted mb-6"
+            style={{ fontFamily: "var(--font-declandar), ui-monospace, monospace" }}
+          >
+            <span style={{ color: "var(--cyan)" }}>●</span> LIVE TRACE · A SAMPLE REQUEST · HOVER A LAYER TO PAUSE
+          </p>
+          <RequestTrace />
         </div>
 
         {/* closing rule */}

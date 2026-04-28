@@ -159,6 +159,32 @@ html.lenis body {
   .rim-trace-gradient::before { animation: none; }
 }
 
+/* ─── Section 05 — request trace (Stack section) ──────────────────── */
+/*
+ * The packet rides the right rail: 0%→50% it travels top→bottom (request),
+ * 50%→100% it returns bottom→top (response). At 50% it briefly stalls and
+ * the gradient flips red so the response pass reads as the inverted color.
+ */
+@keyframes trace-packet {
+  0%   { top: 0%;    background: linear-gradient(180deg, var(--cyan), rgba(0,255,157,0.2)); box-shadow: 0 0 18px var(--cyan-glow); }
+  48%  { top: 100%; }
+  52%  { top: 100%;  background: linear-gradient(180deg, var(--accent), rgba(255,45,45,0.2)); box-shadow: 0 0 18px var(--accent-glow); }
+  98%  { top: 0%; }
+  100% { top: 0%;    background: linear-gradient(180deg, var(--cyan), rgba(0,255,157,0.2)); box-shadow: 0 0 18px var(--cyan-glow); }
+}
+/*
+ * Per-row pulse synced with the packet — fires cyan on the request pass
+ * and red on the response pass. Each row's @stage delay shifts it relative
+ * to the packet timeline.
+ */
+@keyframes trace-row-pulse {
+  0%, 100% { background: transparent; }
+  8%       { background: linear-gradient(90deg, transparent 0%, rgba(0,255,157,0.10) 50%, transparent 100%); }
+  16%      { background: transparent; }
+  58%      { background: linear-gradient(90deg, transparent 0%, rgba(255,45,45,0.10) 50%, transparent 100%); }
+  66%      { background: transparent; }
+}
+
 /* terminal-style blinking caret */
 @keyframes blink {
   0%, 49%   { opacity: 1; }

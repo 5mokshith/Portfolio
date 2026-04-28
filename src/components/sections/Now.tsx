@@ -6,7 +6,6 @@ import { GlitchText } from "@/components/effects/GlitchText";
 import { DecryptedText } from "@/components/effects/DecryptedText";
 import { RgbSplitText } from "@/components/effects";
 import { StatusConsole } from "@/components/now/StatusConsole";
-import { TerminalFeed } from "@/components/now/TerminalFeed";
 import { NOW } from "@/content/now";
 
 const REVEAL_EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
@@ -116,16 +115,6 @@ export function Now() {
             ))}
           </div>
 
-          {/* terminal feed */}
-          <div>
-            <p
-              className="mono-caps text-muted mb-3"
-              style={{ fontFamily: "var(--font-declandar), ui-monospace, monospace" }}
-            >
-              <span style={{ color: "var(--cyan)" }}>●</span> LIVE FEED · WHAT I TOUCHED TODAY
-            </p>
-            <TerminalFeed entries={NOW.feed} />
-          </div>
         </div>
 
         {/* availability strip */}
