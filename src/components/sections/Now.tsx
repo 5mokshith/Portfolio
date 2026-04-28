@@ -4,6 +4,9 @@ import { motion } from "motion/react";
 import { BlurText } from "@/components/effects/BlurText";
 import { GlitchText } from "@/components/effects/GlitchText";
 import { DecryptedText } from "@/components/effects/DecryptedText";
+import { RgbSplitText } from "@/components/effects";
+import { StatusConsole } from "@/components/now/StatusConsole";
+import { TerminalFeed } from "@/components/now/TerminalFeed";
 import { NOW } from "@/content/now";
 
 const REVEAL_EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
@@ -11,10 +14,9 @@ const REVEAL_EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
 /**
  * Section 06 — NOW.
  *
- * V1 vocabulary: dark bg, mono-caps frame, big Astro headline.
- * Replaces the v1 fake-telemetry uptime panel with an honest /now-page
- * snapshot — what I'm building, learning, last shipped, status. Each
- * entry decodes its label on scroll-in and lights its hairline red.
+ * Status console at the top (live time, focus, location + uptime / current-build
+ * tiles), the original 2-up entries panel preserved underneath, and a tail -f
+ * style activity feed at the bottom. Headline gets RgbSplitText scrub.
  */
 export function Now() {
   return (
@@ -43,14 +45,14 @@ export function Now() {
             >
               WHAT I&apos;M<br />
               <span className="text-fg/35">DOING</span><br />
-              <span className="text-accent">
+              <RgbSplitText scrub peakPx={5} as="span" className="text-accent">
                 <DecryptedText
                   text="RIGHT NOW."
                   triggerOnInView
                   duration={1100}
                   delay={300}
                 />
-              </span>
+              </RgbSplitText>
             </h2>
           </BlurText>
           <BlurText
@@ -71,46 +73,66 @@ export function Now() {
           </BlurText>
         </div>
 
-        {/* entries — V1 hairline panels, 2-up on desktop */}
-        <div className="grid grid-cols-1 gap-px md:grid-cols-2" style={{ background: "var(--hairline)" }}>
-          {NOW.entries.map((entry, i) => (
-            <motion.div
-              key={entry.label}
-              initial={{ opacity: 0, y: 14, filter: "blur(6px)" }}
-              whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-              viewport={{ once: true, amount: 0.4 }}
-              transition={{ duration: 0.85, ease: REVEAL_EASE, delay: i * 0.08 }}
-              className="group relative bg-bg p-7 transition-colors duration-300 hover:bg-black/60 md:p-9"
-            >
-              {/* label — decodes on scroll-in */}
-              <p
-                className="mono-caps text-accent"
-                style={{ fontFamily: "var(--font-declandar), ui-monospace, monospace" }}
+        <div className="space-y-12">
+          {/* status console — live time, focus, uptime, current build */}
+          <StatusConsole
+            uptimeStartIso={NOW.uptimeStartIso}
+            currentBuild={NOW.currentBuild}
+          />
+
+          {/* original 2-up entries panel — preserved */}
+          <div
+            className="grid grid-cols-1 gap-px md:grid-cols-2"
+            style={{ background: "var(--hairline)" }}
+          >
+            {NOW.entries.map((entry, i) => (
+              <motion.div
+                key={entry.label}
+                initial={{ opacity: 0, y: 14, filter: "blur(6px)" }}
+                whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                viewport={{ once: true, amount: 0.4 }}
+                transition={{ duration: 0.85, ease: REVEAL_EASE, delay: i * 0.08 }}
+                className="group relative bg-bg p-7 transition-colors duration-300 hover:bg-black/60 md:p-9"
               >
-                <DecryptedText
-                  text={entry.label.toUpperCase()}
-                  triggerOnInView
-                  duration={700}
-                  delay={i * 80}
+                <p
+                  className="mono-caps text-accent"
+                  style={{ fontFamily: "var(--font-declandar), ui-monospace, monospace" }}
+                >
+                  <DecryptedText
+                    text={entry.label.toUpperCase()}
+                    triggerOnInView
+                    duration={700}
+                    delay={i * 80}
+                  />
+                </p>
+                <p className="mt-4 font-chakra text-[1rem] leading-[1.65] text-fg/85 md:text-[1.05rem]">
+                  {entry.value}
+                </p>
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute left-7 right-7 top-0 h-px bg-hairline-red opacity-50 transition-opacity duration-300 group-hover:opacity-100 md:left-9 md:right-9"
                 />
-              </p>
-              <p className="mt-4 font-chakra text-[1rem] leading-[1.65] text-fg/85 md:text-[1.05rem]">
-                {entry.value}
-              </p>
-              {/* hairline accent that brightens on hover */}
-              <span
-                aria-hidden
-                className="pointer-events-none absolute left-7 right-7 top-0 h-px bg-hairline-red opacity-50 transition-opacity duration-300 group-hover:opacity-100 md:left-9 md:right-9"
-              />
-            </motion.div>
-          ))}
+              </motion.div>
+            ))}
+          </div>
+
+          {/* terminal feed */}
+          <div>
+            <p
+              className="mono-caps text-muted mb-3"
+              style={{ fontFamily: "var(--font-declandar), ui-monospace, monospace" }}
+            >
+              <span style={{ color: "var(--cyan)" }}>●</span> LIVE FEED · WHAT I TOUCHED TODAY
+            </p>
+            <TerminalFeed entries={NOW.feed} />
+          </div>
         </div>
 
         {/* availability strip */}
         <BlurText
           as="div"
           delay={500}
-          className="mt-10 flex flex-wrap items-baseline justify-between gap-3 border-t border-hairline pt-5"
+          className="mt-12 flex flex-wrap items-baseline justify-between gap-3 border-t border-hairline pt-5"
         >
           <p
             className="mono-caps"
