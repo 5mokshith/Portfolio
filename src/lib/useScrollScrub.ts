@@ -1,6 +1,12 @@
 "use client";
 
-import { useScroll, useTransform, type MotionValue } from "motion/react";
+import {
+  useScroll,
+  useTransform,
+  useMotionValue,
+  useReducedMotion,
+  type MotionValue,
+} from "motion/react";
 import { type RefObject } from "react";
 
 type ScrubOptions = {
@@ -15,21 +21,23 @@ type ScrubOptions = {
  * 0 = element top has just entered the bottom of the viewport.
  * 1 = element bottom has just left the top of the viewport.
  *
- * Use `useTransform` on the result to map to whatever value you need (offset px,
- * rotation deg, opacity etc.). Reduced-motion is handled at the consumer (CSS
- * collapses `--rgb-offset` to 0 via globals.css; non-RGB consumers should gate
- * their own effect on `prefers-reduced-motion`).
+ * Under `prefers-reduced-motion: reduce`, returns a frozen MotionValue at 0 so
+ * any consumer (`useTransform`, `useScrubLinear`, `useScrubPeak`, raw reads)
+ * sees a static value and produces no animation. CSS-driven RGB-split offsets
+ * are also collapsed by the global guard in `globals.css`.
  */
 export function useScrollScrub<T extends HTMLElement>(
   ref: RefObject<T | null>,
   options: ScrubOptions = {},
 ): MotionValue<number> {
   const { offsetStart = "start end", offsetEnd = "end start" } = options;
+  const reduced = useReducedMotion();
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: [offsetStart, offsetEnd],
   });
-  return scrollYProgress;
+  const frozen = useMotionValue(0);
+  return reduced === true ? frozen : scrollYProgress;
 }
 
 /**
