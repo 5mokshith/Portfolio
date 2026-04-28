@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { forwardRef, type CSSProperties, type ReactNode } from "react";
 import { motion } from "motion/react";
 
 type Props = {
@@ -12,6 +12,8 @@ type Props = {
   /** ratio of element visible before triggering (0-1) */
   amount?: number;
   className?: string;
+  /** inline styles forwarded to the underlying motion element */
+  style?: CSSProperties;
   /** rendered as motion.div by default; switch to motion.p for paragraphs */
   as?: "div" | "p" | "span" | "li";
 };
@@ -29,19 +31,23 @@ const components = {
  *
  * Use directly on paragraphs or wrap any block. Stagger sibling reveals
  * by passing increasing `delay` values from the parent.
+ *
+ * Forwards `ref` to the underlying motion element. Ref is typed as
+ * `HTMLElement` (the union of div/p/span/li); cast at the call site if
+ * a more specific element type is required.
  */
-export function BlurText({
-  children,
-  delay = 0,
-  duration = 0.95,
-  amount = 0.4,
-  className,
-  as = "div",
-}: Props) {
+export const BlurText = forwardRef<HTMLElement, Props>(function BlurText(
+  { children, delay = 0, duration = 0.95, amount = 0.4, className, style, as = "div" },
+  ref,
+) {
   const Comp = components[as];
   return (
     <Comp
+      // forwardRef's HTMLElement union doesn't perfectly match each variant;
+      // motion accepts a callback ref, but a typed cast is the cleanest path.
+      ref={ref as React.Ref<HTMLDivElement & HTMLParagraphElement & HTMLSpanElement & HTMLLIElement>}
       className={className}
+      style={style}
       initial={{ opacity: 0, y: 14, filter: "blur(10px)" }}
       whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
       viewport={{ once: true, amount }}
@@ -54,4 +60,4 @@ export function BlurText({
       {children}
     </Comp>
   );
-}
+});

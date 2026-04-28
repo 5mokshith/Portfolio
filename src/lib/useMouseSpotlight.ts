@@ -27,6 +27,16 @@ type SpotlightOptions = {
  * Tracks per-element cursor position + proximity (0..1) for cursor-reactive
  * effects. Disabled on touch devices and under reduced motion — values stay
  * at the inert defaults.
+ *
+ * Rect caching: the element's bounding rect is cached and only recomputed
+ * when (a) a ResizeObserver fires (size change) or (b) window scroll/resize
+ * fires (position change). All recomputes are rAF-throttled so a fast
+ * scroll triggers at most one rect read per frame. The first rect read
+ * happens lazily on mount inside the initial scheduled rAF — this avoids
+ * doing a layout read synchronously during effect setup.
+ *
+ * `pointermove` itself never calls getBoundingClientRect; it reads the
+ * cached center coordinates.
  */
 export function useMouseSpotlight<T extends HTMLElement>(
   ref: RefObject<T | null>,
@@ -44,12 +54,31 @@ export function useMouseSpotlight<T extends HTMLElement>(
     if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    const onMove = (e: PointerEvent) => {
+    let cx = 0;
+    let cy = 0;
+    let hasRect = false;
+    let rafId: number | null = null;
+
+    const recomputeRect = () => {
+      rafId = null;
       const el = ref.current;
       if (!el) return;
       const rect = el.getBoundingClientRect();
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
+      cx = rect.left + rect.width / 2;
+      cy = rect.top + rect.height / 2;
+      hasRect = true;
+    };
+
+    const scheduleRecompute = () => {
+      if (rafId !== null) return;
+      rafId = requestAnimationFrame(recomputeRect);
+    };
+
+    // Lazy first read — scheduled rather than synchronous.
+    scheduleRecompute();
+
+    const onMove = (e: PointerEvent) => {
+      if (!hasRect) return;
       const dx = e.clientX - cx;
       const dy = e.clientY - cy;
       const d = Math.sqrt(dx * dx + dy * dy);
@@ -62,11 +91,25 @@ export function useMouseSpotlight<T extends HTMLElement>(
       rawProximity.set(0);
       distance.set(falloff);
     };
+
+    let ro: ResizeObserver | null = null;
+    const el = ref.current;
+    if (el && typeof ResizeObserver !== "undefined") {
+      ro = new ResizeObserver(scheduleRecompute);
+      ro.observe(el);
+    }
+
     window.addEventListener("pointermove", onMove, { passive: true });
     window.addEventListener("pointerleave", onLeave, { passive: true });
+    window.addEventListener("scroll", scheduleRecompute, { passive: true });
+    window.addEventListener("resize", scheduleRecompute, { passive: true });
     return () => {
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerleave", onLeave);
+      window.removeEventListener("scroll", scheduleRecompute);
+      window.removeEventListener("resize", scheduleRecompute);
+      if (ro) ro.disconnect();
+      if (rafId !== null) cancelAnimationFrame(rafId);
     };
   }, [ref, falloff, x, y, distance, rawProximity]);
 

@@ -98,7 +98,7 @@ export function About() {
             </div>
 
             {/* status typer — rotating "currently …" readout */}
-            <BlurText as="div" delay={400} className="mt-8 border-t border-hairline-cyan pt-4">
+            <BlurText as="div" delay={400} className="mt-8 border-t border-hairline-cyan pt-4" style={{ borderColor: "var(--hairline-cyan)" }}>
               <StatusTyper
                 entries={[
                   { label: "currently building", value: "Phase-2 of the Grok pipeline — pushing toward 1M assets" },
@@ -128,7 +128,7 @@ export function About() {
                   </p>
                   <p className="mt-2 font-chakra text-[0.95rem] leading-snug text-fg/85">{cell.value}</p>
                   <p
-                    className="mt-1 mono-caps text-fg/35 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                    className="mt-1 mono-caps text-fg/35 opacity-60 transition-opacity duration-300 group-hover:opacity-100"
                     style={{ fontFamily: "var(--font-declandar), ui-monospace, monospace", fontSize: 9 }}
                   >
                     {cell.caption}

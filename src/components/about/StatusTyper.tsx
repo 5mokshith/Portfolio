@@ -15,11 +15,14 @@ type StatusTyperProps = {
  * Terminal-style typed readout — rotates through entries, types each `value`
  * out character-by-character, then idles, then erases and types the next one.
  * Cyan caret. Respects reduced motion (renders the first entry statically).
+ *
+ * Each phase (type → hold → erase → next) is driven by its own timeout
+ * callback. A single `cancelled` flag in the effect's cleanup prevents any
+ * pending callback from firing after unmount or after `idx` advances.
  */
 export function StatusTyper({ entries, intervalMs = 4000, typeMs = 28 }: StatusTyperProps) {
   const [idx, setIdx] = useState(0);
   const [shown, setShown] = useState("");
-  const [phase, setPhase] = useState<"typing" | "hold" | "erasing">("typing");
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -27,28 +30,51 @@ export function StatusTyper({ entries, intervalMs = 4000, typeMs = 28 }: StatusT
       setShown(entries[0]?.value ?? "");
       return;
     }
+
     const target = entries[idx]?.value ?? "";
-    if (phase === "typing") {
-      if (shown.length < target.length) {
-        const t = setTimeout(() => setShown(target.slice(0, shown.length + 1)), typeMs);
-        return () => clearTimeout(t);
+    let cancelled = false;
+    let timer: ReturnType<typeof setTimeout> | null = null;
+
+    const schedule = (fn: () => void, ms: number) => {
+      timer = setTimeout(() => {
+        if (cancelled) return;
+        fn();
+      }, ms);
+    };
+
+    const type = (i: number) => {
+      if (cancelled) return;
+      if (i <= target.length) {
+        setShown(target.slice(0, i));
+        if (i < target.length) {
+          schedule(() => type(i + 1), typeMs);
+        } else {
+          // hold, then erase
+          schedule(() => erase(target.length), intervalMs);
+        }
       }
-      const t = setTimeout(() => setPhase("hold"), intervalMs);
-      return () => clearTimeout(t);
-    }
-    if (phase === "hold") {
-      const t = setTimeout(() => setPhase("erasing"), 0);
-      return () => clearTimeout(t);
-    }
-    if (phase === "erasing") {
-      if (shown.length > 0) {
-        const t = setTimeout(() => setShown(shown.slice(0, -1)), typeMs / 2);
-        return () => clearTimeout(t);
+    };
+
+    const erase = (i: number) => {
+      if (cancelled) return;
+      if (i > 0) {
+        const next = i - 1;
+        setShown(target.slice(0, next));
+        schedule(() => erase(next), typeMs / 2);
+      } else {
+        setIdx((current) => (current + 1) % entries.length);
       }
-      setIdx((i) => (i + 1) % entries.length);
-      setPhase("typing");
-    }
-  }, [shown, phase, idx, entries, intervalMs, typeMs]);
+    };
+
+    // Reset shown so a new entry types from empty.
+    setShown("");
+    schedule(() => type(1), typeMs);
+
+    return () => {
+      cancelled = true;
+      if (timer) clearTimeout(timer);
+    };
+  }, [idx, entries, intervalMs, typeMs]);
 
   const current = entries[idx];
 
