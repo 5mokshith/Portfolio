@@ -9,6 +9,9 @@
   --color-muted: #6b6b6b;
   --color-hairline: rgba(255, 255, 255, 0.08);
   --color-hairline-red: rgba(255, 45, 45, 0.2);
+  --color-cyan: #00ff9d; /* Use this color instead */
+  --color-cyan-glow: rgba(0, 229, 255, 0.45);
+  --color-hairline-cyan: rgba(0, 229, 255, 0.22);
 
   --font-astro: var(--font-astro);
   --font-declandar: var(--font-declandar);
@@ -26,6 +29,9 @@
   --muted: #6b6b6b;
   --hairline: rgba(255, 255, 255, 0.08);
   --hairline-red: rgba(255, 45, 45, 0.2);
+  --cyan: #00e5ff;
+  --cyan-glow: rgba(0, 229, 255, 0.45);
+  --hairline-cyan: rgba(0, 229, 255, 0.22);
 
   --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
   color-scheme: dark;
@@ -174,6 +180,98 @@ html.lenis body {
 }
 .glitch-layer-red   { animation: glitch-red   600ms steps(8, end); }
 .glitch-layer-white { animation: glitch-white 600ms steps(8, end); }
+
+/* ─── RGB-split signature ──────────────────────────────────────────── */
+/*
+ * Static RGB-split. Three siblings positioned in the same place:
+ * a red layer (offset left by --rgb-offset), a white layer (centered),
+ * a cyan layer (offset right by --rgb-offset).
+ * The white layer is the only one read by screen readers; the red/cyan
+ * siblings must be marked aria-hidden in JSX.
+ */
+.rgb-split {
+  position: relative;
+  display: inline-block;
+  --rgb-offset: 0px;
+}
+.rgb-split > .rgb-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  user-select: none;
+}
+.rgb-split > .rgb-layer-red {
+  color: var(--accent);
+  transform: translate3d(calc(var(--rgb-offset) * -1), 0, 0);
+  mix-blend-mode: screen;
+}
+.rgb-split > .rgb-layer-cyan {
+  color: var(--cyan);
+  transform: translate3d(var(--rgb-offset), 0, 0);
+  mix-blend-mode: screen;
+}
+.rgb-split > .rgb-layer-fg {
+  position: relative;
+  color: var(--fg);
+}
+
+/* 2-stage hover for links / chips / buttons. Set the settle target with
+ * data-rgb-settle="red" or "cyan". Default is cyan. */
+.hover-rgb {
+  position: relative;
+  transition: color 200ms ease;
+  --rgb-offset: 0px;
+}
+.hover-rgb::before,
+.hover-rgb::after {
+  content: attr(data-rgb-text);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 120ms ease, transform 240ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.hover-rgb::before {
+  color: var(--accent);
+  transform: translate3d(0, 0, 0);
+  mix-blend-mode: screen;
+}
+.hover-rgb::after {
+  color: var(--cyan);
+  transform: translate3d(0, 0, 0);
+  mix-blend-mode: screen;
+}
+.hover-rgb:hover::before {
+  opacity: 1;
+  transform: translate3d(-4px, 0, 0);
+  animation: hover-rgb-settle-red 240ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.hover-rgb:hover::after {
+  opacity: 1;
+  transform: translate3d(4px, 0, 0);
+  animation: hover-rgb-settle-cyan 240ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.hover-rgb[data-rgb-settle="red"]:hover { color: var(--accent); }
+.hover-rgb[data-rgb-settle="cyan"]:hover,
+.hover-rgb:not([data-rgb-settle]):hover { color: var(--cyan); }
+
+@keyframes hover-rgb-settle-red {
+  0%   { transform: translate3d(0, 0, 0); opacity: 0; }
+  40%  { transform: translate3d(-4px, 0, 0); opacity: 1; }
+  100% { transform: translate3d(0, 0, 0); opacity: 0; }
+}
+@keyframes hover-rgb-settle-cyan {
+  0%   { transform: translate3d(0, 0, 0); opacity: 0; }
+  40%  { transform: translate3d(4px, 0, 0); opacity: 1; }
+  100% { transform: translate3d(0, 0, 0); opacity: 0; }
+}
+
+/* Reduced-motion override for RGB-split — collapse offsets and disable hover anim */
+@media (prefers-reduced-motion: reduce) {
+  .rgb-split { --rgb-offset: 0px !important; }
+  .hover-rgb::before,
+  .hover-rgb::after { display: none !important; }
+}
 
 /* ─── reduced motion ────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
