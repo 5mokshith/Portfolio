@@ -178,8 +178,17 @@ html.lenis body {
   75%  { transform: translate(-1px, -1px); clip-path: polygon(0 80%, 100% 80%, 100% 96%, 0 96%); }
   100% { transform: translate(0, 0);    clip-path: polygon(0 0,   100% 0,   100% 0,  0 0); }
 }
+@keyframes glitch-cyan {
+  0%   { transform: translate(0, 0);     clip-path: polygon(0 12%, 100% 12%, 100% 28%, 0 28%); }
+  20%  { transform: translate(-2px, 1px);clip-path: polygon(0 60%, 100% 60%, 100% 76%, 0 76%); }
+  40%  { transform: translate(2px, -1px);clip-path: polygon(0 35%, 100% 35%, 100% 50%, 0 50%); }
+  60%  { transform: translate(-1px, 0);  clip-path: polygon(0 75%, 100% 75%, 100% 95%, 0 95%); }
+  80%  { transform: translate(1px, 0);   clip-path: polygon(0 5%,  100% 5%,  100% 18%, 0 18%); }
+  100% { transform: translate(0, 0);     clip-path: polygon(0 0,   100% 0,   100% 0,  0 0); }
+}
 .glitch-layer-red   { animation: glitch-red   600ms steps(8, end); }
 .glitch-layer-white { animation: glitch-white 600ms steps(8, end); }
+.glitch-layer-cyan  { animation: glitch-cyan  600ms steps(8, end); }
 
 /* ─── RGB-split signature ──────────────────────────────────────────── */
 /*

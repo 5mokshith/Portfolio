@@ -76,6 +76,13 @@ export function GlitchText({
           >
             {children}
           </span>
+          <span
+            aria-hidden
+            className="glitch-layer glitch-layer-cyan"
+            style={{ color: "var(--cyan)" }}
+          >
+            {children}
+          </span>
         </>
       )}
     </span>
