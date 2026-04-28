@@ -9,9 +9,9 @@
   --color-muted: #6b6b6b;
   --color-hairline: rgba(255, 255, 255, 0.08);
   --color-hairline-red: rgba(255, 45, 45, 0.2);
-  --color-cyan: #00ff9d; /* Use this color instead */
-  --color-cyan-glow: rgba(0, 229, 255, 0.45);
-  --color-hairline-cyan: rgba(0, 229, 255, 0.22);
+  --color-cyan: #00ff9d;
+  --color-cyan-glow: rgba(0, 255, 157, 0.45);
+  --color-hairline-cyan: rgba(0, 255, 157, 0.22);
 
   --font-astro: var(--font-astro);
   --font-declandar: var(--font-declandar);

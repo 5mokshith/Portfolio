@@ -16,7 +16,9 @@ type ScrubOptions = {
  * 1 = element bottom has just left the top of the viewport.
  *
  * Use `useTransform` on the result to map to whatever value you need (offset px,
- * rotation deg, opacity etc.). Disabled (returns a constant 0.5) under reduced motion.
+ * rotation deg, opacity etc.). Reduced-motion is handled at the consumer (CSS
+ * collapses `--rgb-offset` to 0 via globals.css; non-RGB consumers should gate
+ * their own effect on `prefers-reduced-motion`).
  */
 export function useScrollScrub<T extends HTMLElement>(
   ref: RefObject<T | null>,
