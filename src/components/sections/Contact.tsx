@@ -18,7 +18,7 @@ type Link = {
 const SECONDARY: Link[] = [
   { label: "GITHUB", href: "https://github.com/5mokshith", external: true },
   { label: "LINKEDIN", href: "https://www.linkedin.com/in/mokshith-rao-50a385290", external: true },
-  { label: "RESUME", href: "/resume.pdf", download: true },
+  { label: "RESUME", href: "/resume.docx", download: "Mokshith_Rao_Resume.docx" },
 ];
 
 const EMAIL = "mokshithrao1481@gmail.com";

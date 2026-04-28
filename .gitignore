@@ -68,6 +68,7 @@ tmp/
 # superpowers brainstorming artifacts (mockups, server state)
 .superpowers/
 
-# personal docs (resume, scratch notes) — never tracked
-*.docx
+# personal docs (resume, scratch notes) — only ignored at project root.
+# public/resume.docx is the published version and should be tracked.
+/*.docx
 
