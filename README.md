@@ -1,36 +1,93 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Mokshith Rao — Portfolio
 
-## Getting Started
+Personal site for Mokshith Rao, founding engineer at Flashback Labs. A single long-scroll page with a HUD/telemetry aesthetic — duotone hero, scroll-scrubbed type, live request trace, real production metrics from shipped pipelines.
 
-First, run the development server:
+**Live:** [mokshith.vercel.app](https://mokshith.vercel.app)
+
+---
+
+![Hero](docs/screenshots/01-hero.png)
+
+## Stack
+
+- **Next.js 16** (App Router) + **React 19**
+- **TypeScript**, **Tailwind CSS v4**
+- **Motion** (Framer Motion successor) + **GSAP** for scroll-scrubbed timelines
+- **Lenis** for smooth scroll
+- Custom WebGL/Canvas effects (RGB split, pixel canvas, beams, dot field)
+- Local fonts: **Astro** (display), **Declandar** (HUD mono), **Chakra Petch** (body)
+
+## Sections
+
+### 01 · Hero
+Duotone red treatment over a portrait, large-scale Astro display type, live geo HUD, terminal-style typer, mouse parallax.
+
+### 02 · About
+![About](docs/screenshots/02-about.png)
+
+Editorial photo block with corner reticles, pull-quote with selective red emphasis, status typer.
+
+### 03 · Selected Work
+![Selected Work — header](docs/screenshots/03-work.png)
+![Selected Work — cards](docs/screenshots/04-work-cards.png)
+
+Four case-study cards. Each one has its own bespoke visual — multi-agent topology, pixel pipeline grid, viewfinder, file-tree autodev — backed by real shipped projects (AURA, Grok Pipeline, ChefMate, AutoDev).
+
+### 04 · By the Numbers
+![By the Numbers](docs/screenshots/05-numbers.png)
+
+Production telemetry. Real counters from the Grok pipeline run log and the 48-hour hiring-platform sprint — not vanity rounding. Numbers count up on viewport entry over a beam-lit grid.
+
+### 05 · Stack
+![Stack](docs/screenshots/06-stack.png)
+
+Tools in active use across production projects, organized by tier (Runtime / Framework / Infra / Data / AI-ML). Hover any layer to pause the live request trace and inspect what it actually does in the runtime.
+
+### 06 · Now
+![Now](docs/screenshots/07-now.png)
+
+Inspired by [/now pages](https://nownownow.com). A snapshot, not a stream — uptime since founding-engineer start, current build, focus, location.
+
+### 07 · Contact
+![Contact](docs/screenshots/08-contact.png)
+
+Email, GitHub, LinkedIn, resume download — over a reactive dot field.
+
+## Local development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+src/
+├── app/                    # Next.js App Router entry
+├── components/
+│   ├── sections/           # Hero, About, SelectedWork, ByTheNumbers, Stack, Now, Contact
+│   ├── hero/               # PhotoLayer, HUDOverlay, HeroText
+│   ├── work/visuals/       # Per-project bespoke visuals
+│   ├── numbers/            # StatCell, SquaresGrid, Beams, PixelCanvas
+│   ├── stack/              # RequestTrace
+│   ├── effects/            # RgbSplit, DecryptedText, GlitchText, MagneticButton, ...
+│   ├── system/             # SmoothScroll, GrainOverlay, CustomCursor, ClickSpark
+│   └── reactbits/          # BubbleMenu, Cubes
+├── content/                # Single source of truth: projects, stats, stack, now
+├── lib/                    # useMouseParallax, useMouseSpotlight, useScrollScrub
+└── fonts/                  # Astro.ttf, Declandar.otf
+```
 
-## Learn More
+Content lives in [src/content/](src/content/) — edit projects, stats, stack tiers, and the now-snapshot there; sections render from those files.
 
-To learn more about Next.js, take a look at the following resources:
+## Notes
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Built on Next.js 16 — some APIs differ from older majors. See `node_modules/next/dist/docs/` if you fork.
+- Screenshots in this README are generated against the local dev build via Playwright; they live in [docs/screenshots/](docs/screenshots/) (outside `public/` so they don't ship to production).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Contact
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+[mokshithrao1481@gmail.com](mailto:mokshithrao1481@gmail.com)
