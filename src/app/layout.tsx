@@ -6,6 +6,7 @@ import { SmoothScroll } from "@/components/system/SmoothScroll";
 import { GrainOverlay } from "@/components/system/GrainOverlay";
 import { CustomCursor } from "@/components/system/CustomCursor";
 import { ClickSpark } from "@/components/effects/ClickSpark";
+import GradualBlur from "@/components/effects/GradualBlur";
 import BubbleMenu from "@/components/reactbits/BubbleMenu";
 
 // Astro — display: hero name, codenames, section heads, big stats
@@ -71,6 +72,9 @@ export default function RootLayout({
         <GrainOverlay />
         <ClickSpark />
         <CustomCursor />
+
+        {/* page-wide gradual blur — bottom edge of viewport only */}
+        <GradualBlur preset="page-footer" curve="ease-out" divCount={6} strength={2.5} height="7rem" />
       </body>
     </html>
   );
