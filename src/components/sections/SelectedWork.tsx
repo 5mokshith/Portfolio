@@ -1,19 +1,37 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView } from "motion/react";
+import { motion } from "motion/react";
 import { BlurText } from "@/components/effects/BlurText";
 import { GlitchText } from "@/components/effects/GlitchText";
 import { DecryptedText } from "@/components/effects/DecryptedText";
 import { RgbSplitText } from "@/components/effects";
 import { SpotlightCard } from "@/components/work/SpotlightCard";
-import {
-  AuraCubesVisual,
-  GrokPixelVisual,
-  DataArtVisual,
-  ScreenshotVisual,
-} from "@/components/work/visuals";
+import { VideoFrame, CubesVisual, DataArtVisual, ScreenshotVisual } from "@/components/work/visuals";
 import { PROJECTS, type Project } from "@/content/projects";
+
+/**
+ * Per-project video sources. Drop screen recordings at these public paths
+ * — the VideoFrame handles overlay treatment and renders a placeholder
+ * with the same overlays when the file is missing.
+ */
+const PROJECT_VIDEO: Record<string, { src?: string; label: string; caption?: string; intensity?: "default" | "heavy" }> = {
+  AURA: {
+    src: "/work/aura.mp4",
+    label: "AURA · MULTI-AGENT",
+    caption: "PLANNER → 5 WORKERS → EVALUATOR",
+    intensity: "heavy",
+  },
+  ChefMate: {
+    src: "/work/chefmate.mp4",
+    label: "CHEFMATE · ON-DEVICE ML",
+    caption: "TFLITE · WEB + ANDROID",
+  },
+  AutoDev: {
+    src: "/work/autodev.mp4",
+    label: "AUTODEV · WEBCONTAINER",
+    caption: "NL → MULTI-FILE PROJECT",
+  },
+};
 
 /**
  * Section 03 — Selected Work.
@@ -22,10 +40,10 @@ import { PROJECTS, type Project } from "@/content/projects";
  * spotlight on each card, alternating red/cyan corner marks, hover-RGB
  * settle on chips (cyan, secondary) and links (red, primary).
  *
- * Per-project visuals are now extracted (work/visuals/*) so this file stays
- * focused on layout + interaction. AURA → multi-agent Cubes (with cyan
- * secondary ripple), Grok → PixelCanvas with cyan grid mask, others →
- * data-art panel with cyan ghost number behind the bigNumber.
+ * AURA / ChefMate / AutoDev render a `VideoFrame` (drop screen recordings
+ * into `/public/work/<slug>.mp4` — placeholder still shows the overlay
+ * treatment if the file is missing). Grok pipeline has no visual block by
+ * design: text-only card for visual rhythm.
  */
 export function SelectedWork() {
   return (
@@ -103,12 +121,8 @@ export function SelectedWork() {
 }
 
 function ProjectCard({ project, order }: { project: Project; order: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.3 });
-
   return (
     <motion.article
-      ref={ref}
       initial={{ opacity: 0, y: 28, filter: "blur(8px)" }}
       whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
       viewport={{ once: true, amount: 0.25 }}
@@ -120,9 +134,8 @@ function ProjectCard({ project, order }: { project: Project; order: number }) {
       whileHover={{ y: -4 }}
       className="group relative isolate flex flex-col overflow-hidden border border-hairline bg-black/40 transition-colors duration-300 hover:border-accent/40"
     >
-      {/* visual slot — wrapped in cursor-tracking spotlight */}
       <SpotlightCard>
-        <ProjectVisual project={project} active={inView} />
+        <ProjectVisual project={project} />
       </SpotlightCard>
 
       {/* corner marks — alternating red / cyan pair */}
@@ -223,9 +236,14 @@ function ProjectCard({ project, order }: { project: Project; order: number }) {
  * Pick the right per-project visual. The visuals themselves live under
  * `src/components/work/visuals/` — this is just the dispatch.
  */
-function ProjectVisual({ project, active }: { project: Project; active: boolean }) {
-  if (project.title === "AURA") return <AuraCubesVisual />;
-  if (project.title === "Grok pipeline") return <GrokPixelVisual active={active} />;
+function ProjectVisual({ project }: { project: Project }) {
+  if (project.title === "Grok pipeline") {
+    return <CubesVisual label="GROK PIPELINE · DEDUP" caption="442K · 60 GB · 99.99%" />;
+  }
+  const v = PROJECT_VIDEO[project.title];
+  if (v) {
+    return <VideoFrame src={v.src} label={v.label} caption={v.caption} intensity={v.intensity} />;
+  }
   if (project.visual.kind === "data-art") {
     return <DataArtVisual project={project as Project & { visual: { kind: "data-art"; bigNumber: string; caption: string } }} />;
   }
