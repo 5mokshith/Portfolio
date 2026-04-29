@@ -10,11 +10,12 @@ import { StatusTyper } from "@/components/about/StatusTyper";
 /**
  * Section 02 — About.
  *
- * Editorial-poster layout. Photo column carries the visual weight: cyan
- * offset block + oversized "02" + maker's stamp + scroll-driven drift,
- * with the rotating "currently …" status typer underneath as the kinetic
- * footer. Bio column leads with a big greeting, drops a pull-quote on
- * the strongest line, and closes with a fact strip.
+ * Editorial-poster layout. Text column on the left carries the voice;
+ * photo column on the right carries the design weight (cyan offset block,
+ * registration crosses, tick marks, vertical archive stamp, file stamp).
+ *
+ * Tightened to two beats of copy: a one-paragraph intro and a pull-quote
+ * on the line that matters. No fact strip — the bio already says it.
  */
 export function About() {
   return (
@@ -34,41 +35,9 @@ export function About() {
           </BlurText>
         </div>
 
-        <div className="grid grid-cols-1 gap-14 md:grid-cols-12 md:gap-12 lg:gap-20">
-          {/* left — photo column carries kinetic weight */}
-          <div className="md:col-span-5 lg:col-span-5">
-            <BlurText as="div">
-              <PhotoStack src="/about.jpg" alt="Mokshith Rao" />
-
-              {/* location caption directly under photo */}
-              <p
-                className="mt-4 mono-caps text-muted"
-                style={{ fontFamily: "var(--font-declandar), ui-monospace, monospace" }}
-              >
-                <span style={{ color: "var(--cyan)" }}>◆</span> KARIMNAGAR, IN · b. 2004
-              </p>
-            </BlurText>
-
-            {/* status typer — kinetic footer of the photo column */}
-            <BlurText
-              as="div"
-              delay={400}
-              className="mt-6 border-t pt-4"
-              style={{ borderColor: "var(--hairline-cyan)" }}
-            >
-              <StatusTyper
-                entries={[
-                  { label: "currently building", value: "Phase-2 of the Grok pipeline — pushing toward 1M assets" },
-                  { label: "currently reading", value: "Tigerbeetle internals + DDIA chapters 7-9" },
-                  { label: "currently breaking", value: "my own Go code, on purpose, in tests" },
-                ]}
-              />
-            </BlurText>
-          </div>
-
-          {/* right — bio column */}
-          <div className="md:col-span-7 lg:col-span-7 md:pt-[6px]">
-            {/* big Astro greeting */}
+        <div className="grid grid-cols-1 items-start gap-14 md:grid-cols-12 md:gap-12 lg:gap-20">
+          {/* left — text */}
+          <div className="md:col-span-7 lg:col-span-7 order-2 md:order-1 md:pt-[6px]">
             <BlurText as="div" className="mb-10">
               <h2
                 className="font-astro text-fg leading-[0.95]"
@@ -86,22 +55,29 @@ export function About() {
               </h2>
             </BlurText>
 
-            {/* lead paragraph */}
+            {/* one-paragraph intro */}
             <BlurText
               as="p"
               delay={0}
-              className="font-chakra max-w-[58ch] text-fg/85 leading-[1.65]"
+              className="font-chakra max-w-[52ch] text-fg/85 leading-[1.65]"
             >
-              <span style={{ fontSize: "1.15rem" }}>
-                I&apos;m 21, finishing my B.Tech in CS at Jyothishmathi Institute this April. I&apos;ve been the founding engineer at{" "}
-                <span className="text-fg">Flashback Labs</span> since September 2024 — TypeScript, Go, and most of the AWS bill.
+              <span style={{ fontSize: "1.1rem" }}>
+                Founding engineer at{" "}
+                <span className="text-fg">Flashback Labs</span>. TypeScript, Go, and most of the AWS bill. If you&apos;re building something hard,{" "}
+                <a
+                  href="#contact"
+                  className="text-fg underline decoration-accent/60 underline-offset-4 transition-colors hover:text-accent"
+                >
+                  let&apos;s talk
+                </a>
+                .
               </span>
             </BlurText>
 
-            {/* pull quote — the strongest line, large + cyan rule */}
-            <BlurText as="div" delay={150} className="my-9">
+            {/* pull quote */}
+            <BlurText as="div" delay={150} className="mt-9 mb-2">
               <blockquote
-                className="relative max-w-[42ch] border-l-2 pl-6"
+                className="relative max-w-[40ch] border-l-2 pl-6"
                 style={{ borderColor: "var(--cyan)" }}
               >
                 <p
@@ -124,53 +100,33 @@ export function About() {
               </blockquote>
             </BlurText>
 
-            {/* supporting body */}
-            <BlurText
-              as="p"
-              delay={300}
-              className="font-chakra max-w-[58ch] text-fg/75 text-[1rem] leading-[1.7]"
-            >
-              I like the unglamorous half of AI: pipelines, runtimes, on-device inference. Outside work I&apos;m usually reading distributed-systems papers, breaking my own code on purpose, or shipping a weekend project nobody asked for. If you&apos;re building something hard,{" "}
-              <a
-                href="#contact"
-                className="text-fg underline decoration-accent/60 underline-offset-4 transition-colors hover:text-accent"
-              >
-                let&apos;s talk
-              </a>
-              .
-            </BlurText>
-
-            {/* fact strip — HUD: pulsing dots alternating red/cyan, hover reveals caption */}
+            {/* status typer — kinetic close on the text column */}
             <BlurText
               as="div"
-              delay={500}
-              className="mt-12 grid grid-cols-3 gap-4 border-t border-hairline pt-5"
+              delay={400}
+              className="mt-10 border-t pt-4 max-w-[52ch]"
+              style={{ borderColor: "var(--hairline-cyan)" }}
             >
-              {[
-                { label: "ROLE", value: "Founding engineer · Flashback Labs", caption: "Sept 2024 — present", dot: "red" as const },
-                { label: "STUDYING", value: "B.Tech CSE · grad APR 2026", caption: "Jyothishmathi Institute", dot: "cyan" as const },
-                { label: "WRITING IN", value: "TypeScript · Go · SQL", caption: "+ a little Python when forced", dot: "red" as const },
-              ].map((cell) => (
-                <div key={cell.label} className="group relative">
-                  <p
-                    className="mono-caps text-muted flex items-center gap-2"
-                    style={{ fontFamily: "var(--font-declandar), ui-monospace, monospace" }}
-                  >
-                    <span
-                      className="pulse-dot inline-block h-1.5 w-1.5 rounded-full"
-                      style={{ background: cell.dot === "red" ? "var(--accent)" : "var(--cyan)" }}
-                    />
-                    {cell.label}
-                  </p>
-                  <p className="mt-2 font-chakra text-[0.95rem] leading-snug text-fg/85">{cell.value}</p>
-                  <p
-                    className="mt-1 mono-caps text-fg/35 opacity-60 transition-opacity duration-300 group-hover:opacity-100"
-                    style={{ fontFamily: "var(--font-declandar), ui-monospace, monospace", fontSize: 9 }}
-                  >
-                    {cell.caption}
-                  </p>
-                </div>
-              ))}
+              <StatusTyper
+                entries={[
+                  { label: "currently building", value: "Phase-2 of the Grok pipeline — pushing toward 1M assets" },
+                  { label: "currently reading", value: "Tigerbeetle internals + DDIA chapters 7-9" },
+                  { label: "currently breaking", value: "my own Go code, on purpose, in tests" },
+                ]}
+              />
+            </BlurText>
+          </div>
+
+          {/* right — photo */}
+          <div className="md:col-span-5 lg:col-span-5 order-1 md:order-2">
+            <BlurText as="div">
+              <PhotoStack src="/about.jpg" alt="Mokshith Rao" />
+              <p
+                className="mt-4 mono-caps text-muted"
+                style={{ fontFamily: "var(--font-declandar), ui-monospace, monospace" }}
+              >
+                <span style={{ color: "var(--cyan)" }}>◆</span> KARIMNAGAR, IN · b. 2004
+              </p>
             </BlurText>
           </div>
         </div>
